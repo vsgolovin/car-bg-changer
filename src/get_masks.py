@@ -27,11 +27,14 @@ def main(src: str, dst: str):
         if file.suffix.lower() != ".jpg":
             continue
         img = cv2.cvtColor(cv2.imread(str(file)), cv2.COLOR_BGR2RGB)
+        height, width = img.shape[:2]
         x = torch.tensor(img.transpose(2, 0, 1))
         with torch.no_grad():
             output = model(transform(x).unsqueeze(0))
         # "car" is the 7th class in PASCAL VOC dataset
         car_mask = torch.softmax(output["out"], 1).squeeze(0).numpy()[7]
+        car_mask = cv2.resize(car_mask, (width, height),
+                              interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(
             str(output_dir / (file.stem + ".png")),
             (car_mask * 255.).round().astype("uint8")
