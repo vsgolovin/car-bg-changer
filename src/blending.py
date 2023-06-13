@@ -29,6 +29,17 @@ def blend_images(fg_img: np.ndarray, bg_img: np.ndarray, mask: np.ndarray,
     return reconstruct_from_laplacian_pyramid(pyr)
 
 
+def naive_blending(fg_img: np.ndarray, bg_img: np.ndarray, mask: np.ndarray
+                   ) -> np.ndarray:
+    assert fg_img.shape == bg_img.shape and mask.shape == fg_img.shape[:2]
+    fg = fg_img.astype(np.float64)
+    bg = bg_img.astype(np.float64)
+    mask = mask[:, :, np.newaxis]
+    output = fg * mask + bg * (1 - mask)
+    output = output.clip(0, 255).round().astype(np.uint8)
+    return output
+
+
 def gaussian_pyramid(img: np.ndarray, n: int = 6) -> list[np.ndarray]:
     lvl = img.copy()
     pyramid = [lvl]
