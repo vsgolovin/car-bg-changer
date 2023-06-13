@@ -1,4 +1,6 @@
 data/*
+!data/fg_images
+!data/bg_images
 .vscode
 lightning_logs
 
