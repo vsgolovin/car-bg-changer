@@ -10,3 +10,14 @@ python3 get_masks.py $FG_DIR $RAW_MASKS
 mkdir $PROCESSED_MASKS
 python3 process_masks.py $RAW_MASKS $PROCESSED_MASKS
 
+# use Laplacian pyramids to blend images
+OUT_DIR="output/blended"
+for file in data/fg_images/*.jpg; do
+    img=$(basename "$file" .jpg)
+    python3 insert_image.py \
+        "${FG_DIR}/${img}.jpg" \
+        "${PROCESSED_MASKS}/${img}.png" \
+        data/bg_images/background.jpg \
+        --save-as "output/blended/${img}.jpg" \
+        --scale 0.25
+done;
