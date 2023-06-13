@@ -64,7 +64,7 @@ class CarsDataset(Dataset):
 class UNetModule(pl.LightningModule):
     def __init__(self, freeze: int = 5):
         super().__init__()
-        self.model = ResNetUNet(freeze)
+        self.model = ResNetUNet(freeze=freeze)
         self.loss_fn = nn.MSELoss()
 
     def configure_optimizers(self):
